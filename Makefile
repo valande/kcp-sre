@@ -8,7 +8,7 @@ IMAGE_REGISTRY_DOCKERHUB 	?= docker.io
 IMAGE_REGISTRY_GHCR			?= ghcr.io
 IMAGE_REPO					= valande
 IMAGE_NAME					?= sre-ss
-VERSION						?= 1.0.0
+VERSION						?= v1.0.0
 
 # Variables used to configure docker images registries to build and push
 IMAGE_LOCAL				= $(IMAGE_NAME):$(VERSION)
