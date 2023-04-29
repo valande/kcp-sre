@@ -40,13 +40,13 @@ activate_venv: requirements.txt
 .PHONY: docker-build
 docker-build: ## Build image
 	docker build -t $(IMAGE_LOCAL) .
+
+.PHONY: publish
+publish: docker-build ## Publish image
 	docker tag $(IMAGE_LOCAL) $(IMAGE_DOCKERHUB)
 	docker tag $(IMAGE_LOCAL) $(IMAGE_DOCKERHUB_LATEST)
 	docker tag $(IMAGE_LOCAL) $(IMAGE_GHCR) 
 	docker tag $(IMAGE_LOCAL) $(IMAGE_GHCR_LATEST)
-
-.PHONY: publish
-publish: docker-build ## Publish image
 	docker push $(IMAGE_DOCKERHUB)
 	docker push $(IMAGE_DOCKERHUB_LATEST)
 	docker push $(IMAGE_GHCR)
