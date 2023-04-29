@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+      - 'rc*'
     
 jobs:
   release:
@@ -39,8 +40,8 @@ jobs:
         id: configure-login-ghcr
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Build and publish images
         uses: docker/build-push-action@v4
@@ -50,5 +51,5 @@ jobs:
           tags: |
             valande/sre-ss:${{ steps.get_version.outputs.version }}
             valande/sre-ss:latest
-#            ghcr.io/valande/sre-ss:${{ steps.get_version.outputs.version }}
-#            ghcr.io/valande/sre-ss:latest
+            ghcr.io/valande/sre-ss:${{ steps.get_version.outputs.version }}
+            ghcr.io/valande/sre-ss:latest
