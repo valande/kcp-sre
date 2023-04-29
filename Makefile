@@ -8,7 +8,7 @@ IMAGE_REGISTRY_DOCKERHUB 	?= docker.io
 IMAGE_REGISTRY_GHCR			?= ghcr.io
 IMAGE_REPO					= valande
 IMAGE_NAME					?= sre-ss
-VERSION						?= v2.0.0
+VERSION						?= dev
 
 # Variables used to configure docker images registries to build and push
 IMAGE_LOCAL				= $(IMAGE_NAME):$(VERSION)
@@ -33,19 +33,20 @@ unit-test-coverage: activate_venv
 .PHONY: activate_venv
 activate_venv: requirements.txt
 	python3 -m venv $(VENV)
+	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 
 
 .PHONY: docker-build
 docker-build: ## Build image
 	docker build -t $(IMAGE_LOCAL) .
+
+.PHONY: publish
+publish: docker-build ## Publish image
 	docker tag $(IMAGE_LOCAL) $(IMAGE_DOCKERHUB)
 	docker tag $(IMAGE_LOCAL) $(IMAGE_DOCKERHUB_LATEST)
 	docker tag $(IMAGE_LOCAL) $(IMAGE_GHCR) 
 	docker tag $(IMAGE_LOCAL) $(IMAGE_GHCR_LATEST)
-
-.PHONY: publish
-publish: docker-build ## Publish image
 	docker push $(IMAGE_DOCKERHUB)
 	docker push $(IMAGE_DOCKERHUB_LATEST)
 	docker push $(IMAGE_GHCR)
