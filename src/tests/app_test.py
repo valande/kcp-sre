@@ -28,3 +28,11 @@ class TestSimpleServer:
 
         assert response.status_code == 200
         assert response.json() == {"msg": "Hello World"}
+
+    @pytest.mark.asyncio
+    async def sre_test(self):
+        """Tests the SRE endpoint"""
+        response = client.get("sre")
+
+        assert response.status_code == 200
+        assert response.json() == {"sre": "ok"}
