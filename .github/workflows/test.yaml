@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - 'main'
+      - 'feat-01-add-endpoint'
+      - 'develop'
 
 env:
   PYTHON_VERSION: '3.8.12'
