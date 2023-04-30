@@ -8,7 +8,7 @@ image:
   repository: valande/sre-ss
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v2.0.1"
+  tag: "v2.0.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -36,6 +36,12 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+metrics:
+  enabled: true
+  svc:
+    port: 8000
+    name: metrics
+
 service:
   type: ClusterIP
   port: 8081
@@ -56,24 +62,20 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 50m
+    memory: 128Mi
+  requests:
+    cpu: 20m
+    memory: 64Mi
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 50
-  targetCPUUtilizationPercentage: 70
-  # targetMemoryUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
 
 nodeSelector: {}
 
