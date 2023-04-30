@@ -131,6 +131,8 @@ Los artefactos generados se publican tanto en ghcr.io como en el hub de docker:
     $ kubectl -n monitoring port-forward svc/prometheus-grafana 3000:http-web
     ```
     ![snaps/grafana_home.png](./snaps/grafana_home.png)
+    ![snaps/grafana_dashboard.png](./snaps/grafana_dashboard.png)
+    ![snaps/grafana_dashboard_mem.png](./snaps/grafana_dashboard_mem.png)
 
     ```
     $ kubectl -n monitoring port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090
