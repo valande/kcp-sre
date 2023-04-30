@@ -126,3 +126,25 @@ Los artefactos generados se publican tanto en ghcr.io como en el hub de docker:
     ```
     $ helm -n simpleserver upgrade ss-sre --wait --install --create-namespace simpleserver
     ```
+7. Hacer algunos `port-forward` para exponer los servicios creados:
+    ```
+    $ kubectl -n monitoring port-forward svc/prometheus-grafana 3000:http-web
+    ```
+    ![snaps/grafana_home.png](./snaps/grafana_home.png)
+
+    ```
+    $ kubectl -n monitoring port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090
+    ```
+    ![snaps/grafana_home.png](./snaps/prometheus_alerts.png)
+    
+    ```
+    $ kubectl -n simpleserver port-forward svc/ss-sre-simpleserver 8080:8081
+    ```
+    ![snaps/grafana_home.png](./snaps/endpoint_sre.png)
+    
+    Además, si se hace `port-forward` sobre el pod para el puerto 8000:8000, se pueden observar las métricas de Prometheus:
+    ```
+    $ kubectl -n simpleserver port-forward <pod> 8000:8000
+    ```
+    ![snaps/grafana_home.png](./snaps/prometheus_raw.png)
+
