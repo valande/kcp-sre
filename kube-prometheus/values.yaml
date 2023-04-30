@@ -129,8 +129,8 @@ additionalPrometheusRulesMap:
     groups:
       - name: simpleserver.rules
         rules:
-          - alert: SimpleServerConsumingMoreMemoryThanRequest
-            expr: avg(container_memory_usage_bytes{container="simpleserver"}) by (pod) > avg(kube_pod_container_resource_requests{resource="memory",container="simpleserver"}) by (pod)
+          - alert: HighMemoryUsage
+            expr: sum by (pod) (container_memory_usage_bytes{container_name="simpleserver"}) / sum by (pod) (kube_pod_container_resource_limits_memory_bytes{container_name="simpleserver"}) * 100 > 80
             for: 0m
             labels:
               severity: critical
@@ -140,10 +140,19 @@ additionalPrometheusRulesMap:
               description: "Pod consuming more memory than requested"
               message: Pod {{ $labels.pod }} is consuming more memory than requested
               
-          - alert: SimpleServerConsumingMoreCPUThanRequest
-            #expr: container_cpu_usage_seconds_total{container="simpleserver"} > kube_pod_container_resource_requests{resource="cpu",container="simpleserver"}
-            #sum(rate(container_cpu_usage_seconds_total{container_name="simpleserver"}[1m])) by (pod) * 1000
-            expr: sum(rate(container_cpu_usage_seconds_total{container_name="simpleserver"}[1m])) by (pod) * 1000 > kube_pod_container_resource_requests{resource="cpu",container="simpleserver"}
+          - alert: NormalMemoryUsage
+            expr: sum by (pod) (container_memory_usage_bytes{container_name="simpleserver"}) / sum by (pod) (kube_pod_container_resource_limits_memory_bytes{container_name="simpleserver"}) * 100 < 80
+            for: 5m
+            labels:
+              severity: warning
+              alertname: "simpleserver container is consuming more memory than requested"
+            annotations:
+              summary: Pod {{ $labels.pod }} consuming more memory than requested
+              description: "Pod consuming more memory than requested"
+              message: Pod {{ $labels.pod }} is consuming more memory than requested
+              
+          - alert: HighCpuUsage
+            expr: sum by (pod) (rate(container_cpu_usage_seconds_total{container_name="simpleserver"}[1m])) * 100 > 80
             for: 0m
             labels:
               severity: high
@@ -152,3 +161,14 @@ additionalPrometheusRulesMap:
               summary: Pod {{ $labels.pod }} consuming more CPU than requested
               description: "Pod consuming more CPU than requested"
               message: Pod {{ $labels.pod }} is consuming more CPU than requested
+
+          - alert: NormalCpuUsage
+            expr: sum by (pod) (rate(container_cpu_usage_seconds_total{container_name="simpleserver"}[1m])) * 100 < 80
+            for: 5m
+            labels:
+              severity: warning
+              alertname: "simpleserver container is consuming more CPU than requested"
+            annotations:
+              summary: Pod {{ $labels.pod }} consuming normal CPU
+              description: "Pod consuming normal CPU"
+              message: Pod {{ $labels.pod }} is consuming normal CPU
