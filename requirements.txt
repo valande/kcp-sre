@@ -8,8 +8,8 @@ coverage==6.2
 pytest-cov==3.0.0
 pytest-asyncio==0.18.3
 uvicorn==0.17.6
-certifi==2021.10.8
+certifi==2022.12.7
 charset-normalizer==2.0.9
-requests==2.27.1
+requests==2.31.0
 urllib3==1.26.7
 prometheus-client==0.14.0
